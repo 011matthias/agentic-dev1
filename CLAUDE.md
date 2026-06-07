@@ -64,6 +64,22 @@ category?" and operationalize the answer as a hook or tool (preferred), a rule, 
 memory. Friction is logged to `docs/friction-register.md`; `tools/friction-watch.py`
 surfaces patterns at session start.
 
+## How we work
+
+The operating model is `rule_operating`: lean and floor-gated. Reversible work
+(code, tests, feature-branch commit/push/PR, merging a verified PR, drafting and
+landing rules/docs) runs autonomously; only the irreversible floor (deploy,
+release, tag, force push, direct-to-main, destructive or outward-facing actions)
+needs an explicit order. Review happens after the fact.
+
+How a change is built is `rule_dev_loop`: Understand -> Specify -> Plan ->
+Implement -> Verify -> Review -> Integrate -> Learn, with three non-negotiables
+(understand before change; verify behavior via `tools/verify.py`, not state;
+anneal every failure into a guard).
+
+Session rhythm is the full protocol: `rule_session_start` at the open,
+`/comd_checkpoint` at the close, `/comd_resume` to reload.
+
 ## Git workflow
 
 Feature branches; direct push to `main` is gated. Branch naming:
@@ -78,6 +94,10 @@ Feature branches; direct push to `main` is gated. Branch naming:
 
 ## Status
 
-The mechanical harness (hooks, tools, CI, tests, CREW) is in place. The rule
-foundation (`.claude/rules/`), the agent set (`.claude/agents/`), and the broader
-architecture are under active design by the owner; see `.claude/rules/README.md`.
+The mechanical harness (hooks, tools, CI, tests, CREW) is in place, and the
+operating foundation is written: `rule_operating` (how we work), `rule_dev_loop`
+(how a change is built), and `rule_session_start` plus the checkpoint/resume
+commands (session rhythm). Still to write as real friction earns them:
+`rule_anti_slop` (and re-pointing the inert em-dash gate), `rule_code_review`,
+`rule_release`, `rule_dependency_hygiene`, plus the agent set. See
+`.claude/rules/README.md`.

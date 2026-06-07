@@ -10,4 +10,5 @@ hook. Add a one-line row when you add a tool.
 | `friction-watch.py [--format json] [--quiet] [--once-per-day]` | Surface friction-register patterns (concentration, recurrence, stale backlog, memory-sprawl) that should trigger a self-improvement pass. Runs at SessionStart. |
 | `session_state.py [--status]` | Shared session-state store: tool/file counters for the session-pressure meter, plus friction candidates queued for the checkpoint drain. |
 | `strip-em-dash.py <file>` | Mechanically replace em-dashes with `; ` in a file. Paired with the `em-dash-strip-gate` hook (anti-slop voice discipline). |
+| `verify.py [scope] [--json]` | Behavioral verification bar. Run before claiming a unit of work done and cite the result. `harness` = ruff + INDEX + pytest; `<product>` = its npm build/verify; `all` (default) = both. See `rule_dev_loop.md` non-negotiable 2. |
 | `wire-hooks.py [--check\|--ensure\|--write]` | Idempotently wire or repair the canonical 9-hook enforcement block into `.claude/settings.local.json`. The cross-device recurrence kill (tracked file is the single source of truth). |
