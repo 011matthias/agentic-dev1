@@ -11,3 +11,4 @@ Types: `agent-deferred`, `missed-tool`, `verification-theater`, `skipped-gate`,
 
 | Date | Scope | Type | Description | Resolved | Fix |
 |------|-------|------|-------------|----------|-----|
+| 2026-06-07 | harness | infrastructure-deferred | seeded gate-skip-detector + post-action-gate don't recognize tools/verify.py as a validation step, so a push after verify.py false-fires the pre-publish advisory in dev1 sessions | No | add verify.py to gate-skip VALIDATE_PATTERNS + READONLY_PATTERNS in the next harness pass |
