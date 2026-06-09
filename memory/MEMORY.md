@@ -5,3 +5,4 @@ to holds the full fact. Add a pointer when you add a memory file.
 
 - [CREW game; concept + build state](project_crew_game.md); single-device pass-and-play party game; first product, now lives in products/crew/.
 - [Windows git-read mangling](gotcha_windows_git_read.md); use git ls-tree / cat-file -p, not git show <rev>:<path>.
+- [Cross-repo cwd: never cd into dev1 from an ops-rooted session](gotcha_cross_repo_cwd.md); drive by git -C / gh -R / uv run --directory / absolute paths. cd-guard catches `&&` but not `;`.
