@@ -33,9 +33,9 @@ SHIP_PATTERNS = [
     r"\bgit\s+push\b",
     r"\bgit\s+commit\b",
     r"\bgh\s+pr\s+(create|merge|edit)\b",
-    r"\bvercel\s+(deploy|--prod)\b",
 ]
 BUILD_TEST_PATTERNS = [
+    r"\btools/verify\.py\b",                # the canonical dev1 verify command
     r"\bnpm\s+run\s+build\b",
     r"\bnpm\s+test\b",
     r"\bpytest\b",
@@ -48,10 +48,12 @@ BUILD_TEST_PATTERNS = [
 # Commands that LOOK like build/test (match BUILD_TEST_PATTERNS) but are
 # really read-only / behavioral verification / hook tests. These never count
 # toward the streak — mirrors gate-skip-detector READONLY_PATTERNS so a sweep
-# of validators or hook-tests doesn't false-fire iteration-3x.
+# of validators or hook-tests doesn't false-fire iteration-3x. tools/verify.py
+# is the canonical verify command: re-running it after a fix is verification,
+# not a stuck fix-then-test loop, so it is exempt from the streak too.
 EXEMPT_PATTERNS = [
     r"\.claude/hooks/[\w.-]+\.py",          # invoking a hook directly = hook test
-    r"\btools/(?:validate|wire-hooks|friction-watch|spec-staleness|safe-edit|gh-merge|rename-chat)\b",
+    r"\btools/(?:verify|check-architecture|check-index|wire-hooks|friction-watch|strip-em-dash)\b",
     r"--check\b", r"--dry-run\b", r"--list\b", r"--help\b", r"-h\b",
     r"\bpy_compile\b",
     r"\bjson\.tool\b", r"\bjson\.load\b",
@@ -140,12 +142,13 @@ def main() -> int:
     if is_ship:
         log_fire(f"SHIP cmd={cmd[:80]}")
         advisories.append(
-            "[SHIP GATE] You just ran a ship-class command (push/commit/PR/deploy). "
-            "If the build passed, continue the chain in this turn: commit -> push -> PR -> "
-            "merge. Do NOT pause to ask 'should I merge?' / 'want me to push?' -- those are "
-            "ship-gate violations. Only pause for force-push to main, prod data deletion, or "
-            "no-undo actions. After deploy, run the deploy verification gate (WebFetch the URL, "
-            "check 200 + key content)."
+            "[SHIP GATE] You just ran a ship-class command (push / commit / PR). "
+            "If verify.py passed, continue the chain in this turn: commit -> push -> "
+            "PR -> merge on CI-green. Do NOT pause to ask 'should I merge?' / 'want "
+            "me to push?' -- on a green build those are ship-gate violations. Stop "
+            "only at the floor (deploy, release, tag, force push, direct-to-main, "
+            "destructive), which needs an explicit order. See rule_behaviors.md "
+            "'Ship gate' and rule_no_auto_commit.md."
         )
 
     if is_build:
@@ -180,9 +183,9 @@ def main() -> int:
             if n >= 3:
                 advisories.append(
                     "[HARD LIMIT] You have run the SAME build/test command 3 times in a row. "
-                    "This is a fix-then-test loop. STOP fixing. Escalate per ITERATION-LOOP.md "
-                    "Hard Gate: summarize what you tried, the current failure mode, and what "
-                    "you'd try next. Do not run another fix-then-test until the user weighs in."
+                    "This is a fix-then-test loop. STOP fixing. Escalate per rule_behaviors.md "
+                    "'Build escalation': summarize what you tried, the current failure mode, and "
+                    "what you'd try next. Do not run another fix-then-test until the user weighs in."
                 )
     else:
         prev_n, _ = read_state()
