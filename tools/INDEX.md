@@ -6,6 +6,7 @@ hook. Add a one-line row when you add a tool.
 
 | Tool | When to use |
 |------|-------------|
+| `check-architecture.py` | Understand-before-change gate: assert every `products/<name>/` has `ARCHITECTURE.md` + `README.md`, and every concrete product-relative path the map names in backticks exists on disk (the map stays true to the tree). Run `uv run tools/check-architecture.py`. See `rule_dev_loop.md` non-negotiable 1. |
 | `check-index.py` | CI gate: assert every script in `tools/` has a row in this file. Run `uv run tools/check-index.py`. |
 | `friction-watch.py [--format json] [--quiet] [--once-per-day]` | Surface friction-register patterns (concentration, recurrence, stale backlog, memory-sprawl) that should trigger a self-improvement pass. Runs at SessionStart. |
 | `session_state.py [--status]` | Shared session-state store: tool/file counters for the session-pressure meter, plus friction candidates queued for the checkpoint drain. |

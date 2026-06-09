@@ -59,6 +59,7 @@ def harness_steps() -> list[tuple[str, list[str]]]:
         ("harness: ruff", ["uv", "run", "--no-project", "--with", "ruff",
                            "ruff", "check", "tools", ".claude/hooks", "tools/tests"]),
         ("harness: INDEX gate", ["uv", "run", "tools/check-index.py"]),
+        ("harness: ARCHITECTURE gate", ["uv", "run", "tools/check-architecture.py"]),
         ("harness: pytest", ["uv", "run", "--no-project", "--with", "pytest",
                             "pytest", "tools/tests"]),
     ]
