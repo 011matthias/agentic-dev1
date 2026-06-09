@@ -1,6 +1,6 @@
 ---
 name: project_crew_game
-description: CREW party game — concept, modes, and build state. First product in agentic-dev1, lives in products/crew/.
+description: CREW party game; concept, modes, and build state. First product in agentic-dev1, lives in products/crew/.
 metadata:
   type: project
 ---

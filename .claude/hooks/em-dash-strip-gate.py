@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""PostToolUse(Write|Edit): auto-strip em-dashes from human-to-human output.
+"""PostToolUse(Write|Edit): auto-strip the em-dash character from dev1 markdown.
 
-Scope: client-facing deliverables, outbound drafts, proposals. These are the
-human-to-human communication surfaces where the zero-em-dash client directive
-(2026-05-08) applies strictly. Internal operator docs (workspace/clients/*/
-context/*.md outside drafts/), session logs (docs/), rules, and code keep the
-looser previous convention per the 2026-05-15 scope correction and are NOT
-touched here.
+Scope: dev1-authored markdown prose (docs, READMEs, rules, memory, product
+markdown), excluding vendored/generated trees (node_modules, dist, build). This
+is the internal knowledge base read at every session start and understand-phase;
+the em-dash is the strongest autocomplete tell and is mechanically removable, so
+it is removed rather than remembered. See rule_anti_slop.md.
 
-Why a mutating hook and not advisory: the zero-em-dash rule needed post-hoc
-validator cleanup three sessions running (missed-memory-recall x3). Advisory
-depends on agent recall, which is the thing that kept failing. Auto-strip
+The ` -- ` double-hyphen is intentionally NOT stripped: in a code/CLI repo it is
+a legitimate end-of-options separator. tools/strip-em-dash.py handles only the
+em-dash character; this hook just routes dev1 markdown into it.
+
+Why a mutating hook and not advisory: the consultancy version of this rule needed
+post-hoc validator cleanup three sessions running (recall failure x3). Auto-strip
 removes the recall dependency entirely (Layer-1 self-anneal: tool over memory).
 
 Non-blocking: runs tools/strip-em-dash.py, emits a systemMessage if it changed
@@ -46,27 +48,23 @@ def normalize_path(file_path: str) -> str:
     return file_path
 
 
-def in_human_to_human_scope(file_path: str) -> bool:
-    """Mirror post-write-gate's deliverable+comms scope: the client-facing set.
+def in_dev1_doc_scope(file_path: str) -> bool:
+    """True for dev1-authored markdown prose: docs, READMEs, rules, memory,
+    product markdown. The em-dash discipline (rule_anti_slop) covers the whole
+    internal knowledge base, not a client-facing subset (dev1 has no clients).
 
-    Match: client deliverables, doc-site/platform-public HTML, outbound drafts,
-    proposals. These are read verbatim by a client or external reader.
-    Exclude (by omission): context/*.md outside drafts/, docs/, .claude/, code.
+    Match: any `.md` / `.markdown` / `.mdx`.
+    Exclude: non-markdown (code keeps its own dashes), and vendored / generated
+    trees (node_modules, dist, build, .git) that dev1 did not author.
     """
     if not file_path:
         return False
     p = file_path.replace("\\", "/").lower()
-    if not p.endswith((".html", ".htm", ".md", ".markdown", ".mdx")):
+    if not p.endswith((".md", ".markdown", ".mdx")):
         return False
-    deliverable = any(m in p for m in (
-        "/platform/public/",
-        "/deliverables/",
-        "/hero-exports/",
-        "/notion-pages/",
-        "/doc-site/",
-    ))
-    comms = ("/context/drafts/" in p) or ("/proposals/" in p)
-    return deliverable or comms
+    if any(seg in p for seg in ("/node_modules/", "/dist/", "/build/", "/.git/")):
+        return False
+    return True
 
 
 def main() -> None:
@@ -80,7 +78,7 @@ def main() -> None:
     raw = tool_input.get("file_path") or tool_response.get("filePath") or ""
     file_path = normalize_path(raw)
 
-    if not in_human_to_human_scope(file_path):
+    if not in_dev1_doc_scope(file_path):
         sys.exit(0)
     if not Path(file_path).is_file() or not STRIP_TOOL.is_file():
         sys.exit(0)
@@ -104,7 +102,7 @@ def main() -> None:
     if changed:
         msg = (
             f"em-dash-strip-gate: auto-stripped em-dashes from {Path(file_path).name} "
-            f"(human-to-human scope). {out.splitlines()[-1] if out else ''}".strip()
+            f"(dev1 markdown). {out.splitlines()[-1] if out else ''}".strip()
         )
         print(json.dumps({
             "systemMessage": msg,
@@ -112,9 +110,9 @@ def main() -> None:
                 "hookEventName": "PostToolUse",
                 "additionalContext": (
                     f"NOTE: {Path(file_path).name} had em-dashes auto-stripped by the "
-                    f"em-dash-strip-gate hook (client-facing scope, strict zero rule). "
-                    f"The file on disk now differs from your last write. Re-read before "
-                    f"further edits to that region."
+                    f"em-dash-strip-gate hook (dev1 prose; rule_anti_slop). The file on "
+                    f"disk now differs from your last write. Re-read before further edits "
+                    f"to that region."
                 ),
             },
         }))
