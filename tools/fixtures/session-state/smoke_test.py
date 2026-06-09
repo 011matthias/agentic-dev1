@@ -15,7 +15,7 @@ Verifies (not just "compiles") the spec's acceptance criteria:
      its decision output is unchanged (the capture is a pure side-effect).
 
 Isolation: every step runs against a throwaway state file via the
-AGENTIC_OPS_SESSION_STATE env var, so a live session's counters are untouched.
+AGENTIC_DEV1_SESSION_STATE env var, so a live session's counters are untouched.
 
 Run:  uv run tools/fixtures/session-state/smoke_test.py
 Exit: 0 if all pass, 1 on first failure.
@@ -36,8 +36,8 @@ METER = HOOKS / "session-pressure-meter.py"
 NAC_GATE = HOOKS / "no-auto-commit-gate.py"
 
 # Isolated state file for this test run.
-_TMP_STATE = os.path.join(tempfile.gettempdir(), "agentic-ops-session-state.SMOKETEST.json")
-os.environ["AGENTIC_OPS_SESSION_STATE"] = _TMP_STATE
+_TMP_STATE = os.path.join(tempfile.gettempdir(), "agentic-dev1-session-state.SMOKETEST.json")
+os.environ["AGENTIC_DEV1_SESSION_STATE"] = _TMP_STATE
 
 # Import the module under test AFTER setting the env var.
 sys.path.insert(0, str(TOOLS))

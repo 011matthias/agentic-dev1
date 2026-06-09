@@ -49,7 +49,7 @@ def _capture(signal: str, context: str) -> None:
 
 
 HOOK_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "hook-log.txt")
-BUFFER_FILE = os.path.join(tempfile.gettempdir(), "agentic-ops-cmd-buffer.txt")
+BUFFER_FILE = os.path.join(tempfile.gettempdir(), "agentic-dev1-cmd-buffer.txt")
 BUFFER_MAX = 30
 
 PUBLISH_PATTERNS = [

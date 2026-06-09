@@ -11,7 +11,7 @@ so each hook subprocess runs with cwd = an isolated NON-git tmp dir. There the
 prototype carve-out is inert and `git rev-parse` fails, so the branch is forced
 explicitly via NO_AUTO_COMMIT_GATE_BRANCH and the CI verdict via
 NO_AUTO_COMMIT_GATE_CI (both production-never test seams). Transcripts are
-absolute paths, so cwd never affects their reading. AGENTIC_OPS_SESSION_STATE
+absolute paths, so cwd never affects their reading. AGENTIC_DEV1_SESSION_STATE
 is redirected into the tmp dir so the ask-path friction capture can't touch
 live session state.
 """
@@ -23,7 +23,7 @@ NO_AUTH = str(FX / "no-auth.jsonl")  # user message with no ship-order keyword
 
 
 def _run(cmd, transcript, tmp_path, branch=None, ci=None):
-    env = {"AGENTIC_OPS_SESSION_STATE": str(tmp_path / "sstate.json")}
+    env = {"AGENTIC_DEV1_SESSION_STATE": str(tmp_path / "sstate.json")}
     if branch is not None:
         env["NO_AUTO_COMMIT_GATE_BRANCH"] = branch
     if ci is not None:

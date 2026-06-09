@@ -3,7 +3,7 @@ so CI covers it too.
 
 tools/fixtures/session-state/smoke_test.py already verifies the meter hook,
 the no-auto-commit capture side effect, counters/bands, and lock contention.
-It self-isolates its state file (AGENTIC_OPS_SESSION_STATE -> tempfile) and
+It self-isolates its state file (AGENTIC_DEV1_SESSION_STATE -> tempfile) and
 exits non-zero on the first failure, so wrapping it is enough.
 """
 import subprocess
