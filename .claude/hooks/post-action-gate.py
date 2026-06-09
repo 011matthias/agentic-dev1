@@ -27,7 +27,7 @@ import sys
 import tempfile
 
 HOOK_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "hook-log.txt")
-COUNTER_FILE = os.path.join(tempfile.gettempdir(), "agentic-ops-build-counter.txt")
+COUNTER_FILE = os.path.join(tempfile.gettempdir(), "agentic-dev1-build-counter.txt")
 
 SHIP_PATTERNS = [
     r"\bgit\s+push\b",

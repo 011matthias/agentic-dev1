@@ -35,7 +35,7 @@ def run_hook(
 
     `cwd` overrides the working directory (used to neutralise hooks that shell
     out to git relative to cwd). `env` is merged over the inherited environment
-    (used to redirect AGENTIC_OPS_SESSION_STATE so a gate's friction-candidate
+    (used to redirect AGENTIC_DEV1_SESSION_STATE so a gate's friction-candidate
     side effect cannot pollute the developer's live session state).
     """
     full_env = dict(os.environ)

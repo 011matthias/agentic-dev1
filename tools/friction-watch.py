@@ -182,7 +182,7 @@ def main() -> int:
 
     if args.once_per_day:
         import os, tempfile, time
-        marker = os.path.join(tempfile.gettempdir(), "agentic-ops-friction-last")
+        marker = os.path.join(tempfile.gettempdir(), "agentic-dev1-friction-last")
         try:
             last = os.path.getmtime(marker) if os.path.exists(marker) else 0
         except OSError:

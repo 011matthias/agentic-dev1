@@ -27,7 +27,7 @@ not (a gate firing CORRECTLY is the system working, not friction).
 DESIGN
 ------
 - One JSON file in the OS temp dir (transient working state; never committed,
-  per rule_no_file_bloat). Path: {tempdir}/agentic-ops-session-state.json.
+  per rule_no_file_bloat). Path: {tempdir}/agentic-dev1-session-state.json.
 - Session boundary is detected by the hook payload's `session_id`. A changed
   id => new session => reset (counts start at zero). An unchanged id across a
   compaction => counts PRESERVED. This is why there is no SessionStart reset
@@ -55,8 +55,8 @@ from datetime import datetime, timezone
 
 # State-file path is overridable via env so smoke tests run in isolation
 # without clobbering a live session's counters.
-STATE_FILE = os.environ.get("AGENTIC_OPS_SESSION_STATE") or os.path.join(
-    tempfile.gettempdir(), "agentic-ops-session-state.json"
+STATE_FILE = os.environ.get("AGENTIC_DEV1_SESSION_STATE") or os.path.join(
+    tempfile.gettempdir(), "agentic-dev1-session-state.json"
 )
 LOCK_FILE = STATE_FILE + ".lock"
 
