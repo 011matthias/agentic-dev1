@@ -8,6 +8,11 @@ Replaces ` — ` (space, em-dash, space) with `; ` (semicolon, space) in prose
 lines. Skips fenced code blocks (``` ... ```) so legitimate dash usage in code
 stays intact. Skips indented code blocks (4+ leading spaces, non-list lines).
 
+` -- ` (space hyphen hyphen space) is left untouched: in this code/CLI repo it
+is a legitimate end-of-options separator (`git ls-tree <rev> -- <path>`), not an
+em-dash substitute. See rule_anti_slop.md "Em-dashes" (dev1 divergence from the
+consultancy zero-double-hyphen rule).
+
 Usage:
     uv run tools/strip-em-dash.py FILE [FILE ...]
 
@@ -37,12 +42,13 @@ def strip_em_dashes(path: Path) -> tuple[int, int]:
         if line.startswith("    ") and not stripped.startswith(("-", "*", "+")):
             out.append(line)
             continue
-        # Replace ` — ` (em-dash) and ` -- ` (double-hyphen substitute) with `; ` in prose
+        # Replace ` — ` (spaced em-dash) with `; ` in prose. ` -- ` is left
+        # intact on purpose (legitimate CLI end-of-options separator in this
+        # repo); see the module docstring + rule_anti_slop.md "Em-dashes".
         em_count = line.count(" — ")
-        dd_count = line.count(" -- ")
-        new_line = line.replace(" — ", "; ").replace(" -- ", "; ")
+        new_line = line.replace(" — ", "; ")
         if new_line != line:
-            replacements += em_count + dd_count
+            replacements += em_count
         out.append(new_line)
 
     new_text = "".join(out)

@@ -10,7 +10,7 @@ See [CLAUDE.md](CLAUDE.md) for the full charter.
 
 ## Products
 
-- **[crew](products/crew/)** — single-device pass-and-play party game (Vite + React +
+- **[crew](products/crew/)**; single-device pass-and-play party game (Vite + React +
   TypeScript PWA).
 
 ## Harness

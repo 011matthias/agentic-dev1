@@ -32,7 +32,7 @@ Each product is self-contained: its own source, dependencies, tests, README, and
 build. The hub provides the shared harness (enforcement hooks, CI gates, the
 self-annealing loop); it does not share runtime code between products.
 
-- **crew** — single-device pass-and-play party game (Impostor + about-each-other
+- **crew**; single-device pass-and-play party game (Impostor + about-each-other
   modes). `cd products/crew && npm install && npm run dev`.
 
 ## Harness
@@ -44,15 +44,15 @@ layer is ever silently stripped (a device sync, a settings reset), the next sess
 re-wires it.
 
 Active gates:
-- **no-auto-commit (B6)** — tiered ship gate. Feature-branch commit / push / PR-open
+- **no-auto-commit (B6)**; tiered ship gate. Feature-branch commit / push / PR-open
   run autonomously; `gh pr merge` auto-fires on CI-green; main / force / deploy / tag
   stay on the gated floor and need an explicit order.
-- **cd-guard** — refuses `cd X && ...` that persists shell cwd across hook runs; use
+- **cd-guard**; refuses `cd X && ...` that persists shell cwd across hook runs; use
   `git -C`, `npm --prefix`, a subshell, or absolute paths.
-- **session-pressure-meter** — counts tool calls + files, advises checkpointing.
-- **input-classifier / stop-b1 / post-action / gate-skip** — input-interpretation and
+- **session-pressure-meter**; counts tool calls + files, advises checkpointing.
+- **input-classifier / stop-b1 / post-action / gate-skip**; input-interpretation and
   verification-discipline advisories.
-- **em-dash-strip / anti-slop** — voice discipline (scope pending the rule design).
+- **em-dash-strip / anti-slop**; voice discipline (scope pending the rule design).
 
 **CI.** `.github/workflows/ci.yml` runs the enforcement-layer pytest suite, ruff (the
 real-bug ruleset), and the `tools/INDEX.md` membership gate, and builds each product.
