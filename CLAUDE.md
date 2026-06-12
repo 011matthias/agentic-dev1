@@ -101,3 +101,7 @@ commands (session rhythm). Still to write as real friction earns them:
 `rule_anti_slop` (and re-pointing the inert em-dash gate), `rule_code_review`,
 `rule_release`, `rule_dependency_hygiene`, plus the agent set. See
 `.claude/rules/README.md`.
+
+The active next-steps context is `docs/blueprint.md`: the catalyzer build
+(harvest -> spine -> quality -> ship -> dogfood, cycles 6-10) targeting
+website builds and vibe-coded apps and games.
