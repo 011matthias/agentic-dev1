@@ -49,6 +49,24 @@ def test_stamp_game_is_well_formed(tmp_path):
     assert "verify" in pkg["scripts"]
 
 
+def test_stamp_website_is_well_formed(tmp_path):
+    dest, written = SCAF.scaffold(
+        "website", "my-site", products_root=tmp_path, templates_root=TEMPLATES
+    )
+    # _shared skeletons + the Astro stack, archetype winning. _shared/README is
+    # used (the archetype ships no README, so the product gets the product brief).
+    for required in ("ARCHITECTURE.md", "README.md", "PRODUCT.md", "package.json",
+                     "astro.config.mjs", "tsconfig.json", "src/pages/index.astro",
+                     "src/layouts/Layout.astro", "verify/check-website.mjs", ".gitignore"):
+        assert (dest / required).is_file(), f"missing {required}"
+
+    pkg = json.loads((dest / "package.json").read_text(encoding="utf-8"))
+    assert pkg["name"] == "my-site"
+    assert pkg["dev1"]["archetype"] == "website"
+    assert "verify" in pkg["scripts"]
+    assert written, "the stamped file list is reported"
+
+
 def test_tokens_fully_substituted(tmp_path):
     dest, _ = SCAF.scaffold(
         "game", "my-game", products_root=tmp_path, templates_root=TEMPLATES,
@@ -95,9 +113,10 @@ def test_rejects_invalid_name(tmp_path):
 
 
 def test_rejects_stub_archetype(tmp_path):
-    # website/app ship a README but no package.json yet: must refuse, not stamp half.
+    # app ships a README but no package.json yet: must refuse, not stamp half.
+    # (website became ready when its Astro stack landed; app is the remaining stub.)
     with pytest.raises(SCAF.ScaffoldError):
-        SCAF.scaffold("website", "site", products_root=tmp_path, templates_root=TEMPLATES)
+        SCAF.scaffold("app", "demo", products_root=tmp_path, templates_root=TEMPLATES)
 
 
 def test_refuses_to_overwrite_existing_product(tmp_path):

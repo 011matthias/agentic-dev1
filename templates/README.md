@@ -19,7 +19,7 @@ second: no central list, CI discovers products by globbing `products/*/package.j
 |-----------|-------|-------|
 | `game` | Vite + TS canvas, no framework | ready |
 | `app` | Vite + React + TS PWA (also DOM games) | stub; CREW extraction, lands with skil_crew-verify |
-| `website` | Astro + Tailwind | stub; filled from the Cycle-6 harvest |
+| `website` | Astro + Tailwind (sitemap, static output) | ready |
 
 A template is "ready" when it carries a `package.json`. `scaffold.py` refuses a
 stub archetype rather than stamp a half-built product. The CI `templates` job
