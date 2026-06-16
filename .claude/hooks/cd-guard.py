@@ -61,7 +61,10 @@ CD_RX = re.compile(
     (?!~\s*$)                        # NOT `cd ~` alone
     (?!\$HOME\s*$)                   # NOT `cd $HOME` alone
     (?P<path>[^\s;&|]+)              # the path argument
-    (?:\s+\&\&|\s*\n|\s+;|\s*$)      # followed by && or stmt boundary (chained)
+    (?=[\s;&|]|$)                     # path boundary: ws, separator (; & |), or
+                                     # end. Zero-width so the `;`/`|`/`&` form is
+                                     # caught with OR without a leading space;
+                                     # main()'s `rest` check decides bare vs chained.
     """,
     re.VERBOSE,
 )

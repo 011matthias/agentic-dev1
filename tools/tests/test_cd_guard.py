@@ -28,6 +28,16 @@ def test_blocks_cd_subdir_chain():
     assert _is_block(_run("cd workspace/clients/brisken && ls"))
 
 
+def test_blocks_cd_subdir_semicolon_spaced():
+    # `cd X ; cmd` leaks the cwd exactly like `&&` (cross-repo cwd hazard).
+    assert _is_block(_run("cd workspace/clients/brisken ; ls"))
+
+
+def test_blocks_cd_subdir_semicolon_tight():
+    # No space before `;` is the form that slipped past the old regex.
+    assert _is_block(_run("cd workspace/clients/brisken; ls"))
+
+
 def test_allows_subshell():
     assert _run("( cd workspace/clients/brisken && ls )").returncode == 0
 

@@ -17,9 +17,12 @@ Rules:
   `git -C <dev1>`, `gh -R 011matthias/agentic-dev1`, `uv run --directory <dev1>`,
   `npm --prefix <dev1>`. `gh -R` needs no cwd, so a `cd` before it is always
   needless.
-- `cd-guard` only catches `cd X && ...`; it does NOT catch `cd X ; ...`
-  (semicolon sequencing), which leaks the cwd identically. Watch the `;` form by
-  hand until cd-guard is widened (friction register 2026-06-09).
+- `cd-guard` now catches a leading `cd X` chained by `&&`, `;`, `|`, or `&`,
+  with or without a space before the separator (widened 2026-06-16 from a
+  space-requiring trailing group to a zero-width boundary lookahead). It still
+  does NOT catch a `cd` that is not at a statement boundary (e.g. inside a
+  subshell `( cd X && ... )`, which is the safe form anyway). The carried reflex
+  stands regardless: never lead with `cd`; use git -C / gh -R / absolute paths.
 - If a hook error reports `can't open file ...agentic-dev1\.claude\hooks\<x>.py`,
   the cwd drifted; reset with PowerShell `Set-Location "<ops root>"` (PowerShell
   shares the harness cwd and is not gated by the Bash PreToolUse hooks).
