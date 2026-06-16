@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
+    "verify": "tsc --noEmit && vite build && uv run --no-project --with playwright python verify/round.py",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview --host"
   },

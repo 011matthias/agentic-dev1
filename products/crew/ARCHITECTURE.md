@@ -32,6 +32,7 @@ in its header: **new modes add screens, they do not fork the kernel primitives.*
 | `src/audio.ts` | Web-Audio SFX kit: `playSfx`, `playTick`, `playChime`, `haptic`, mute state, `unlockAudio`. |
 | `src/confetti.ts`, `src/util.ts` | `fireConfetti`; `shuffle`, `fmtTime`, `prefersReducedMotion`. |
 | `src/styles.css` | All styling, including the animations that must stay CSS-driven (see gotchas). |
+| `verify/round.py` | Behavioral verification (the npm `verify` script): drives a real headless Confessions round and asserts the invariants below from the logged events. See `skil_crew-verify`. |
 
 ## The mode contract
 
