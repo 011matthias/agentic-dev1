@@ -144,6 +144,15 @@ def scaffold(
         )
 
     title = title or title_from_slug(name)
+    # The title is the only user-supplied substitution value (name is SLUG-checked,
+    # archetype is a fixed set). A title carrying a token would survive the single
+    # substitution pass and leak a placeholder into a stamped file; refuse it so
+    # "no placeholder survives" holds unconditionally.
+    if "{{" in title or "dev1-template-" in title:
+        raise ScaffoldError(
+            f"invalid title {title!r}: must not contain a substitution token "
+            "('{{...}}' or 'dev1-template-')"
+        )
     subs = substitutions(archetype, name, title)
 
     # Collect the overlay: later layers (archetype) win on a path collision.

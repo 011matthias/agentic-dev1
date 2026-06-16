@@ -27,8 +27,10 @@ Steps:
 4. **Fill the brief.** Write the step-2 answers into the scaffolded `PRODUCT.md`,
    and note any stack divergence in `ARCHITECTURE.md`. These are the
    understand-before-change contract the gates check.
-5. **Prove it once.** `cd products/<name> && npm install && npm run verify`, then
-   cite the PASS. A scaffolded product builds green before its first commit.
+5. **Prove it once.** `npm --prefix products/<name> install && npm --prefix
+   products/<name> run verify`, then cite the PASS (use `--prefix`, not
+   `cd <dir> &&`, which the cd-guard hook refuses). A scaffolded product builds
+   green before its first commit.
 6. **Branch and commit.** `product/<name>/scaffold`, first commit, push, open the
    PR. The product-discovering CI picks it up with no yaml edit (it globs
    `products/*/package.json`). Reversible, so it runs autonomously per

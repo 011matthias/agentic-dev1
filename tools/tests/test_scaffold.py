@@ -104,3 +104,12 @@ def test_refuses_to_overwrite_existing_product(tmp_path):
     (tmp_path / "taken").mkdir()
     with pytest.raises(SCAF.ScaffoldError):
         SCAF.scaffold("game", "taken", products_root=tmp_path, templates_root=TEMPLATES)
+
+
+def test_rejects_title_carrying_a_token(tmp_path):
+    # A title is the only user-controlled substitution value; one containing a
+    # token would otherwise leak a placeholder into a stamped file.
+    for bad in ("{{PRODUCT_NAME}}", "dev1-template-game"):
+        with pytest.raises(SCAF.ScaffoldError):
+            SCAF.scaffold("game", "x", products_root=tmp_path, templates_root=TEMPLATES,
+                          title=bad)
