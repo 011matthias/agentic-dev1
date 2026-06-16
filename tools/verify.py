@@ -22,6 +22,7 @@ list to keep in sync. Exit 0 only when every step passes.
   uv run tools/verify.py harness
   uv run tools/verify.py crew
   uv run tools/verify.py --json
+  uv run tools/verify.py --list     # product names, one per line (CI discovery)
 """
 from __future__ import annotations
 
@@ -91,9 +92,20 @@ def main() -> int:
     ap.add_argument("scope", nargs="?", default="all",
                     help="all (default) | harness | <product name>")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
+    ap.add_argument("--list", action="store_true",
+                    help="print discovered product names (one per line) and exit; "
+                         "the product-discovering CI loops over this")
     args = ap.parse_args()
 
     known = discover_products()
+
+    # Discovery is the single source of truth for "what products exist"; CI reads
+    # it here instead of re-globbing, so a new product joins CI with no yaml edit.
+    if args.list:
+        for name in known:
+            print(name)
+        return 0
+
     scope = args.scope
     if scope not in ("all", "harness") and scope not in known:
         print(f"[verify] no product 'products/{scope}/' with a package.json. "
