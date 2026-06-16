@@ -63,8 +63,8 @@ Ordered by leverage. The synthesis named vendoring `webapp-testing` the single h
 | # | Action | Skill | Status |
 |---|---|---|---|
 | 1 | write | skil_game-feel-review | DONE (this cycle; CREW-grounded, gstack rubric attributed) |
-| 2 | vendor | webapp-testing (Apache-2.0) | PENDING, highest leverage; copy into `.claude/skills/webapp-testing/` with the Apache NOTICE; black-box (invoke via `--help`, do not ingest). Keystone for skil_game-feel-review + skil_crew-verify. |
-| 3 | vendor | frontend-design (Apache-2.0) | PENDING; copy into `.claude/skills/frontend-design/` with attribution. |
+| 2 | vendor | webapp-testing (Apache-2.0) | DONE 2026-06-16 (Cycle 6 harvest). Vendored verbatim from anthropics/skills @ `5754626` into `.claude/skills/webapp-testing/` (SKILL.md, LICENSE.txt, scripts/with_server.py, examples/, VENDORED.md); each file byte-identical to the upstream blob SHA. Black-box (invoke via `--help`). Keystone for skil_game-feel-review + skil_crew-verify. |
+| 3 | vendor | frontend-design (Apache-2.0) | DONE 2026-06-16 (Cycle 6 harvest). Vendored verbatim from anthropics/skills @ `5754626` into `.claude/skills/frontend-design/` (SKILL.md, LICENSE.txt, VENDORED.md); byte-identical to upstream. Paired anneal: em-dash gate now skips any skill dir shipping a LICENSE.txt, so vendored markdown stays faithful. |
 | 4 | write | skil_crew-verify | PENDING; pairs with Cycle 6 `rule_testing`. Drives a real round via webapp-testing, asserts the rule_code_review invariants, registers as products/crew npm `verify`. Closes the Cycle-4 anneal (Confessions anonymity has no test). |
 | 5 | write | skil_pwa-install-and-measure | DEFERRED; lower priority, build when the install/measurement work is scheduled. |
 

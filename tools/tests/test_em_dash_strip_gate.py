@@ -37,6 +37,26 @@ def test_scope_excludes_non_markdown_and_vendored():
     assert not edg.in_dev1_doc_scope("")
 
 
+def test_scope_excludes_vendored_skill_with_license(tmp_path):
+    # A vendored skill ships a LICENSE.txt; its markdown stays byte-faithful and
+    # out of the em-dash discipline (Apache-2.0 retention).
+    skill = tmp_path / ".claude" / "skills" / "frontend-design"
+    skill.mkdir(parents=True)
+    (skill / "LICENSE.txt").write_text("Apache License 2.0\n", encoding="utf-8")
+    md = skill / "SKILL.md"
+    md.write_text("Follow it exactly — the brief wins.\n", encoding="utf-8")
+    assert not edg.in_dev1_doc_scope(str(md))
+
+
+def test_scope_includes_authored_skill_without_license(tmp_path):
+    # Authored skills (skil_*, no LICENSE.txt) keep the em-dash discipline.
+    skill = tmp_path / ".claude" / "skills" / "skil_game-feel-review"
+    skill.mkdir(parents=True)
+    md = skill / "SKILL.md"
+    md.write_text("Body text.\n", encoding="utf-8")
+    assert edg.in_dev1_doc_scope(str(md))
+
+
 def test_normalize_path_gitbash_drive():
     assert edg.normalize_path("/c/Users/x/file.md") == "C:/Users/x/file.md"
 
@@ -64,3 +84,16 @@ def test_end_to_end_skips_non_markdown(tmp_path):
     p = run_hook("em-dash-strip-gate.py", {"tool_input": {"file_path": str(f)}})
     assert "—" in f.read_text(encoding="utf-8")  # untouched
     assert p.stdout.strip() == ""
+
+
+def test_end_to_end_preserves_em_dash_in_vendored_skill(tmp_path):
+    # A vendored skill's markdown (sibling LICENSE.txt) must survive verbatim:
+    # editing it would diverge from upstream and break Apache-2.0 retention.
+    skill = tmp_path / ".claude" / "skills" / "webapp-testing"
+    skill.mkdir(parents=True)
+    (skill / "LICENSE.txt").write_text("Apache License 2.0\n", encoding="utf-8")
+    md = skill / "SKILL.md"
+    md.write_text("Wait for networkidle — critical on dynamic apps.\n",
+                  encoding="utf-8")
+    run_hook("em-dash-strip-gate.py", {"tool_input": {"file_path": str(md)}})
+    assert "—" in md.read_text(encoding="utf-8")  # vendored: untouched

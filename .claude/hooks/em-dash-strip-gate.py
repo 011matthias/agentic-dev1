@@ -2,7 +2,8 @@
 """PostToolUse(Write|Edit): auto-strip the em-dash character from dev1 markdown.
 
 Scope: dev1-authored markdown prose (docs, READMEs, rules, memory, product
-markdown), excluding vendored/generated trees (node_modules, dist, build). This
+markdown), excluding vendored/generated trees (node_modules, dist, build) and
+vendored skill dirs that ship a LICENSE.txt (kept byte-faithful). This
 is the internal knowledge base read at every session start and understand-phase;
 the em-dash is the strongest autocomplete tell and is mechanically removable, so
 it is removed rather than remembered. See rule_anti_slop.md.
@@ -48,14 +49,31 @@ def normalize_path(file_path: str) -> str:
     return file_path
 
 
+def _is_vendored_skill_doc(file_path: str) -> bool:
+    """True for markdown inside a `.claude/skills/<skill>/` dir that ships a
+    LICENSE.txt: a third-party skill vendored verbatim (e.g. an Apache-2.0 skill
+    from anthropics/skills). Apache-2.0 requires the licensed work be retained, so
+    these stay byte-faithful and out of the em-dash discipline, which targets
+    dev1-authored prose. Authored skills (skil_*) ship no LICENSE.txt and stay in
+    scope.
+    """
+    parts = Path(file_path).parts
+    lower = [seg.lower() for seg in parts]
+    for k in range(len(lower) - 2):
+        if lower[k] == ".claude" and lower[k + 1] == "skills":
+            return (Path(*parts[: k + 3]) / "LICENSE.txt").is_file()
+    return False
+
+
 def in_dev1_doc_scope(file_path: str) -> bool:
     """True for dev1-authored markdown prose: docs, READMEs, rules, memory,
     product markdown. The em-dash discipline (rule_anti_slop) covers the whole
     internal knowledge base, not a client-facing subset (dev1 has no clients).
 
     Match: any `.md` / `.markdown` / `.mdx`.
-    Exclude: non-markdown (code keeps its own dashes), and vendored / generated
-    trees (node_modules, dist, build, .git) that dev1 did not author.
+    Exclude: non-markdown (code keeps its own dashes); vendored / generated trees
+    (node_modules, dist, build, .git); and vendored skill dirs that ship a
+    LICENSE.txt (kept byte-faithful) that dev1 did not author.
     """
     if not file_path:
         return False
@@ -63,6 +81,8 @@ def in_dev1_doc_scope(file_path: str) -> bool:
     if not p.endswith((".md", ".markdown", ".mdx")):
         return False
     if any(seg in p for seg in ("/node_modules/", "/dist/", "/build/", "/.git/")):
+        return False
+    if _is_vendored_skill_doc(file_path):
         return False
     return True
 
