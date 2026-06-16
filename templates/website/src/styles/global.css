@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* Design tokens (Tailwind v4 reads @theme; no tailwind.config.js). These are
+   neutral starting points: a product replaces the palette and type faces with
+   its own art direction (frontend-design), the one place this template stays
+   deliberately quiet so it does not ship as one of the AI-default looks. */
+@theme {
+  --color-ink: oklch(0.22 0.02 250);
+  --color-paper: oklch(0.99 0.005 250);
+  --color-muted: oklch(0.55 0.02 250);
+  --color-accent: oklch(0.58 0.16 256);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Quality floor (skil_website-quality dimension 3/6 and frontend-design's floor):
+   reduced motion honored, a visible keyboard-focus ring, and a smooth scroll
+   that yields to the OS preference. These are not taste; they are the bar. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* The skip link is visually offscreen until focused; keyboard users land on it
+   first and can jump past the nav straight to <main>. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 50;
+}
+.skip-link:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+}

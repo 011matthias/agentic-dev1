@@ -44,7 +44,9 @@ ARCHETYPES = ("website", "app", "game")
 SHARED = "_shared"
 
 # Dirs never copied out of a template (build/install detritus, VCS).
-SKIP_DIRS = {"node_modules", "dist", "build", ".git", "__pycache__"}
+# `.astro` is Astro's generated type/content cache: present after a template
+# build, regenerated on the product's first build, never stamped.
+SKIP_DIRS = {"node_modules", "dist", "build", ".git", "__pycache__", ".astro"}
 
 # A valid product slug: lowercase, starts alphanumeric, kebab-case. Tight on
 # purpose; it becomes both a directory name and the npm package name.

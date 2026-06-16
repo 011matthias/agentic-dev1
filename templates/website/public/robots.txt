@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Absolute URL so crawlers find the sitemap; update the origin to the deployed
+# domain (it must match astro.config `site`).
+Sitemap: https://example.com/sitemap-index.xml

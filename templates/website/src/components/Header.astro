@@ -1,0 +1,27 @@
+---
+import { SITE_TITLE } from '../consts'
+
+// In-page anchors to the landing sections. A real product swaps these for its
+// routes; structure-encodes-meaning (frontend-design), so only link what exists.
+const links = [
+  { href: '/#features', label: 'Features' },
+  { href: '/#about', label: 'About' },
+]
+---
+
+<header class="border-b border-ink/10">
+  <nav aria-label="Primary" class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+    <a href="/" class="text-lg font-semibold tracking-tight">{SITE_TITLE}</a>
+    <ul class="flex gap-6 text-sm text-muted">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} class="transition-colors hover:text-ink">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
