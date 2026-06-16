@@ -55,3 +55,26 @@ PR #23 (main `f2b317a`): the Cycle-7 scaffold spine.
    Playwright smoke for app/game once the crew-verify pattern settles, Lighthouse
    + meta/OG for website.
 4. `design-reviewer` agent + `rule_testing` (Cycle 8).
+
+## Post-merge verification (after #25 Cycle 8 + crew-verify + #26 landed)
+
+`main` `5e8ad11` is green. Next-step 1's seam resolved as designed: crew's
+`verify` now ends in a Playwright round (`verify/round.py`), and the
+product-discovering CI runs it via `verify.py crew` with no yaml edit (latest
+main run: `product:crew npm run verify` PASS).
+
+Open finding (the crew-verify owner's call, not changed here): crew's verify
+passes in ~4.6s in CI, and the `products` job sets up node + uv but NOT Playwright
+browser binaries (no `playwright install` in `ci.yml`, confirmed on `main`). A
+real headless round needs chromium, so the browser assertions are not exercised
+in CI; the green is build + typecheck, not the anonymity/measurement round. Fix
+is one of: add `playwright install chromium` to the `products` job, or have
+`round.py` fail loud (not skip) when no browser is present so the gap is visible.
+Left untouched to avoid overriding a verify contract a parallel session owns; the
+product-discovering CI is correct, the gap is in what crew's own script asserts
+under CI.
+
+Lesson worth carrying: a CI job can go green while a product's headline
+behavioral check silently no-ops for want of a runtime dependency. Green at the
+job level is necessary, not sufficient (`rule_dev_loop` non-negotiable 2); a
+verify script that can skip its core assertion should fail loud instead.
