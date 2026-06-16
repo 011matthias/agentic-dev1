@@ -18,6 +18,7 @@ CLAUDE.md                 # this charter
   commands/               # user-facing entry points
 tools/                    # harness scripts + tests (see tools/INDEX.md)
   tests/                  # enforcement-layer regression suite (pytest)
+templates/                # scaffold archetypes (_shared + website/app/game); see templates/README.md
 products/
   crew/                   # first product: CREW party game (Vite + React + TS PWA)
 docs/
@@ -34,6 +35,12 @@ self-annealing loop); it does not share runtime code between products.
 
 - **crew**; single-device pass-and-play party game (Impostor + about-each-other
   modes). `cd products/crew && npm install && npm run dev`.
+
+New products are scaffolded, not hand-rolled: `/comd_new-product {archetype} {name}`
+(or `uv run tools/scaffold.py {archetype} {name}`) stamps a `templates/` archetype
+into `products/{name}` with its stack, verify wiring, and `"dev1"` manifest block.
+CI discovers products by globbing `products/*/package.json`, so a new one needs no
+yaml edit. See `templates/README.md`.
 
 ## Harness
 

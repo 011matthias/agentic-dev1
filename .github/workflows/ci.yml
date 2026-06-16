@@ -19,23 +19,61 @@ jobs:
         run: uv run --no-project --with ruff ruff check tools .claude/hooks tools/tests
       - name: tools/INDEX.md membership
         run: uv run tools/check-index.py
+      - name: ARCHITECTURE map freshness
+        run: uv run tools/check-architecture.py
       - name: Run enforcement-layer test suite
         run: uv run --no-project --with pytest pytest tools/tests
 
-  crew:
-    name: CREW build
+  products:
+    name: Product builds (discovered)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: products/crew
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      # Discovery is verify.py's job, so a new products/<name>/ joins CI with no
+      # yaml edit (it globs products/*/package.json). Each product runs its own
+      # npm verify script, or build if it has none.
+      - name: Build each discovered product
+        run: |
+          set -euo pipefail
+          products=$(uv run tools/verify.py --list)
+          if [ -z "$products" ]; then echo "no products discovered"; exit 0; fi
+          echo "discovered products:"; echo "$products"
+          for p in $products; do
+            echo "::group::verify $p"
+            uv run tools/verify.py "$p"
+            echo "::endgroup::"
+          done
+
+  templates:
+    name: Template builds (scaffold spine)
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: products/crew/package-lock.json
-      - name: Install dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
+          cache-dependency-path: '**/package-lock.json'
+      # Build every ready template (one with a package.json) so a scaffolded
+      # product cannot inherit a broken template; stub archetypes are skipped.
+      - name: Build each ready template
+        run: |
+          set -euo pipefail
+          built=0
+          for d in templates/*/; do
+            [ -f "${d}package.json" ] || continue
+            echo "::group::template ${d}"
+            npm --prefix "$d" ci
+            npm --prefix "$d" run verify
+            echo "::endgroup::"
+            built=$((built + 1))
+          done
+          echo "templates built: $built"
