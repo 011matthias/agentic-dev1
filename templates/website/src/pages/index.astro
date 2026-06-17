@@ -7,6 +7,8 @@ import Faq from '../components/primitives/Faq.astro'
 import Form from '../components/primitives/Form.astro'
 import Field from '../components/primitives/Field.astro'
 import CtaBand from '../components/primitives/CtaBand.astro'
+import { Picture } from 'astro:assets'
+import showcase from '../assets/showcase.png'
 import { SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION } from '../consts'
 
 // Honest placeholder copy describing the archetype itself; not fabricated. A real
@@ -78,6 +80,22 @@ const faqs = [
         ))
       }
     </ul>
+  </Section>
+
+  <Section width="wide">
+    <Picture
+      src={showcase}
+      formats={['avif', 'webp']}
+      widths={[480, 960, 1440]}
+      sizes="(max-width: 768px) 100vw, 1200px"
+      alt="Abstract brand graphic, a stand-in a real product replaces with its own art."
+      loading="lazy"
+      class="w-full rounded-lg border border-border"
+    />
+    <p class="mt-3 text-sm text-text-muted">
+      Images run through <code class="font-mono text-text">astro:assets</code>: responsive
+      <code class="font-mono text-text">srcset</code> in modern formats (AVIF, WebP), lazy below the fold.
+    </p>
   </Section>
 
   <Section id="faq">

@@ -65,3 +65,23 @@ A site is not finished until, per `docs/website-build-workflow.md`:
 
 The gate suite is the mechanical half; `design-reviewer` + `skil_website-quality`
 are the agent-judged half. Both clear before a site ships.
+
+## Asset pipeline
+
+Polish is generated, not hand-maintained:
+
+- **OG image** (`src/pages/og.png.ts`): a static route that builds a real 1200x630
+  PNG from the brand tokens (reads the colors from `brand.css`, lays it out with
+  satori, rasterizes with resvg). `check-website.mjs` asserts the served image is
+  exactly 1200x630. Swap the bundled OG faces in `src/assets/og/` to match the
+  pairing.
+- **Images** (`astro:assets`): `<Image>`/`<Picture>` emit responsive `srcset` in
+  modern formats (AVIF, WebP), lazy below the fold. Use them for every raster.
+- **Favicon set** (`scripts/gen-assets.mjs`): the SVG plus a 32px PNG fallback and
+  the 180px apple-touch-icon, all from one source `public/favicon.svg`. Re-run the
+  script after editing the source.
+- **Fonts**: self-hosted and subset by Astro's Fonts API (the token layer, piece 1).
+- **SVG**: optimize with `npx svgo <file>` before committing.
+- **Icons**: currently inline SVGs at the use site (accessible, few in number). An
+  inline-sprite strategy is the next step if the icon count grows; deferred while
+  the set is small rather than built speculatively.
