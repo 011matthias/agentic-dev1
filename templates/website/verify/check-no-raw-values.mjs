@@ -14,6 +14,12 @@ const ROOT = process.cwd()
 const DIRS = ['src/components', 'src/pages', 'src/layouts'].map((d) => join(ROOT, d))
 const EXTS = new Set(['.astro', '.ts', '.tsx', '.jsx', '.js'])
 
+// Image-generation endpoints (og.png.ts and the like) are exempt: they rasterize
+// with satori/resvg, which require concrete colors, and they DERIVE those from the
+// brand tokens (with a hex fallback only if parsing fails). The gate guards styling
+// leaks in markup, not raster generation.
+const IMAGE_ROUTE = /\.(png|jpe?g|gif|webp|avif)\.(t|j)sx?$/i
+
 // Color literals. currentColor / transparent / the role tokens are not matched.
 const COLOR = /#[0-9a-fA-F]{3,8}\b|\b(?:oklch|oklab|rgb|rgba|hsl|hsla|lab|lch|color)\(/g
 
@@ -34,7 +40,7 @@ function walk(dir) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name)
     if (statSync(p).isDirectory()) out.push(...walk(p))
-    else if (EXTS.has(extname(p))) out.push(p)
+    else if (EXTS.has(extname(p)) && !IMAGE_ROUTE.test(name)) out.push(p)
   }
   return out
 }

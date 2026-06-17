@@ -63,8 +63,17 @@ for (const rel of htmlFiles) {
   } else if (canon) {
     const ogUrl = new URL(og[1])
     const sameOrigin = ogUrl.host === new URL(canon[1]).host
-    if (sameOrigin && !existsSync(join(DIST, decodeURIComponent(ogUrl.pathname)))) {
+    const ogPath = join(DIST, decodeURIComponent(ogUrl.pathname))
+    if (sameOrigin && !existsSync(ogPath)) {
       fail(rel, `og:image points at a missing file (${ogUrl.pathname})`)
+    } else if (sameOrigin && ogUrl.pathname.endsWith('.png')) {
+      // A real share image is a 1200x630 PNG (the ~1.91:1 card size). Read the
+      // IHDR (width/height at byte offsets 16/20) and assert it, so a generator
+      // that drifts off-size or emits a placeholder is caught.
+      const buf = readFileSync(ogPath)
+      const w = buf.readUInt32BE(16)
+      const h = buf.readUInt32BE(20)
+      if (w !== 1200 || h !== 630) fail(rel, `og:image is ${w}x${h}, expected 1200x630`)
     }
   }
 
