@@ -1,3 +1,27 @@
+# Checkpoint 2026-06-17: website infrastructure build (COMPLETE, 7 of 7)
+
+> UPDATE (close): all 7 pieces shipped and merged (#34-#40). The reusable
+> website-building infrastructure is built end to end and proven by a scaffolded,
+> freshly-designed example site (`products/halftone-press`) that clears the full
+> definition of done (axe 0/0 light+dark, Lighthouse 100/100, distinct identity,
+> real OG from tokens). Pieces 6-7 detail below the original 1-5 record.
+>
+> Piece 6 (#39): `docs/website-reference.md` (benchmarks + the codified AI-tell
+> checklist) + `/comd_build-site` runbook + `rule_website_build` + design-reviewer
+> now reads the tell-list by number.
+> Piece 7 (#40): `products/halftone-press`, a clearly-fictional risograph studio,
+> scaffolded from the infra, fresh technical pairing (Space Grotesk + IBM Plex) +
+> riso duo palette + overprint signature. Independent review (general-purpose agent
+> applying the design-reviewer rubric) returned 0 blockers / 3 majors / 2 minors;
+> majors resolved (riso-grain showcase, connected passes sequence, louder overprint),
+> the "translucent nav" major refuted by computed style (opaque, z-40) and justified.
+>
+> Next: optional dogfood (a real CREW landing page via /comd_build-site); the `app`
+> archetype is the last remaining stub; Cycle 9 ship path (Cloudflare Pages deploy,
+> rule_release) stays on the floor.
+
+---
+
 # Checkpoint 2026-06-17: website infrastructure build (pieces 1-5 of 7)
 
 Scope: harness (templates/website, skills, tools) | Band: autonomous (dev1-rooted,
