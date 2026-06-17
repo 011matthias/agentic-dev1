@@ -1,0 +1,71 @@
+/* brand.css -- PER-PROJECT. The one file a build spends its identity in.
+ *
+ * It assigns every contract color role a real value from the SUBJECT, and gives
+ * the dark set. Everything else (contract.css, the primitives, the gates) is
+ * shared and untouched.
+ *
+ * >>> THIS IS AN EXAMPLE BRAND, NOT A DEFAULT TO SHIP. <<<
+ * A restrained indigo + teal starter, deliberately none of the three AI-default
+ * looks (no cream/serif/terracotta, no near-black/acid, no broadsheet hairline).
+ * skil_website-design regenerates these values per project from the brief.
+ * Shipping THESE values unchanged is the exact failure the toolkit exists to
+ * prevent: infrastructure that congeals into a house style. Replace every value.
+ *
+ * The TYPE PAIRING is the other half of identity and lives in astro.config.mjs
+ * `experimental.fonts` (the Fonts API must be configured there); this file owns
+ * the palette. Colors are oklch: lightness, chroma, hue -- so a whole palette
+ * rotates by editing the hue and holding L/C, which keeps contrast predictable. */
+
+:root {
+  /* `light dark` tells the UA to theme form controls, scrollbars, and the
+     canvas for whichever mode is active; without it native widgets stay light. */
+  color-scheme: light dark;
+
+  /* Light palette (the default). */
+  --bg: oklch(0.985 0.004 250);
+  --surface: oklch(1 0 0);
+  --text: oklch(0.24 0.03 260);
+  --muted: oklch(0.52 0.02 260);
+  --brand: oklch(0.52 0.15 264);
+  --accent: oklch(0.62 0.13 175);
+  --border: oklch(0.9 0.01 260);
+  --focus: oklch(0.52 0.18 264);
+
+  /* Dark palette, declared ONCE here and applied by the two selectors below
+     (OS preference + explicit toggle), so the dark values have one source. */
+  --bg-dark: oklch(0.205 0.02 265);
+  --surface-dark: oklch(0.255 0.02 265);
+  --text-dark: oklch(0.95 0.01 260);
+  --muted-dark: oklch(0.72 0.02 260);
+  --brand-dark: oklch(0.74 0.13 264);
+  --accent-dark: oklch(0.76 0.12 175);
+  --border-dark: oklch(0.32 0.02 265);
+  --focus-dark: oklch(0.8 0.14 264);
+}
+
+/* Follow the OS in dark mode, unless the visitor (or a toggle) has forced light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: var(--bg-dark);
+    --surface: var(--surface-dark);
+    --text: var(--text-dark);
+    --muted: var(--muted-dark);
+    --brand: var(--brand-dark);
+    --accent: var(--accent-dark);
+    --border: var(--border-dark);
+    --focus: var(--focus-dark);
+  }
+}
+
+/* Explicit override: a theme control sets data-theme="dark" on <html> and dark
+   applies regardless of OS. data-theme="light" forces light (handled above). */
+[data-theme="dark"] {
+  --bg: var(--bg-dark);
+  --surface: var(--surface-dark);
+  --text: var(--text-dark);
+  --muted: var(--muted-dark);
+  --brand: var(--brand-dark);
+  --accent: var(--accent-dark);
+  --border: var(--border-dark);
+  --focus: var(--focus-dark);
+}

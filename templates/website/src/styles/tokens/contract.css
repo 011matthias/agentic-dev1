@@ -1,0 +1,83 @@
+/* contract.css -- SHARED, byte-identical in every project.
+ *
+ * The semantic token CONTRACT: the role names, the scales, and the Tailwind
+ * @theme binding. It never holds a brand value; it maps each role to a brand
+ * variable that brand.css supplies. A component references roles (bg-surface,
+ * text-muted, font-display), never raw colors or faces, so re-skinning a site is
+ * a one-file edit (brand.css) and dark mode is a cascade switch with no rebuild.
+ *
+ * Why `@theme inline`: with `inline`, Tailwind emits the brand variable BY NAME
+ * into each utility (`.bg-bg { background: var(--bg) }`) instead of copying the
+ * resolved value. So when [data-theme="dark"] re-declares --bg, every utility
+ * follows automatically, with zero JavaScript. (Plain @theme would bake the light
+ * value into the utility and dark would not take.)
+ *
+ * The brand layer (the var(--name) targets below) lives in two places, both
+ * per-project: the palette in brand.css, and the typeface choice in
+ * astro.config.mjs `experimental.fonts` (the platform requires font config there,
+ * exposed as --ff-display / --ff-body / --ff-mono). */
+
+@theme inline {
+  /* Color roles. Source values: brand.css (--bg .. --focus). */
+  --color-bg: var(--bg); /* page background */
+  --color-surface: var(--surface); /* raised panels, cards */
+  --color-text: var(--text); /* body text */
+  --color-text-muted: var(--muted); /* secondary text, captions */
+  --color-brand: var(--brand); /* primary identity: buttons, links */
+  --color-accent: var(--accent); /* the one secondary, spent sparingly */
+  --color-border: var(--border); /* hairlines, dividers, field borders */
+  --color-focus: var(--focus); /* keyboard focus ring */
+
+  /* Type roles. Source faces: astro.config experimental.fonts. */
+  --font-display: var(--ff-display);
+  --font-body: var(--ff-body);
+  --font-mono: var(--ff-mono);
+
+  /* Type scale: one modular rhythm (~1.25), each step paired with a line-height
+     so headings tighten and body breathes without per-use guesswork. */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.6;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.25;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.15;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1.05;
+  --text-5xl: 4rem;
+  --text-5xl--line-height: 1;
+
+  /* Spacing: a single base. Every p-* / m-* / gap-* derives from it, so one
+     rhythm governs the whole page and "uniform spacing with no rhythm" is not a
+     state you can reach by accident. Adjust the base to retune density globally. */
+  --spacing: 0.25rem;
+
+  /* Form: radius + elevation. (rounded-full is Tailwind's built-in; not redefined.) */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.06);
+  --shadow-md: 0 4px 14px oklch(0 0 0 / 0.08);
+  --shadow-lg: 0 16px 40px oklch(0 0 0 / 0.12);
+
+  /* Motion easings -> ease-standard / ease-emphasized utilities. */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+}
+
+/* Motion durations. Plain custom properties (Tailwind has no `duration` theme
+   namespace mapping from these), referenced by the floor transitions in
+   global.css and by primitives via duration-[var(--duration-base)]. They are
+   neutralized under prefers-reduced-motion in global.css. */
+:root {
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 400ms;
+}

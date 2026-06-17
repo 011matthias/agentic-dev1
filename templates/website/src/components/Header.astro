@@ -9,14 +9,14 @@ const links = [
 ]
 ---
 
-<header class="border-b border-ink/10">
+<header class="border-b border-border">
   <nav aria-label="Primary" class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-    <a href="/" class="text-lg font-semibold tracking-tight">{SITE_TITLE}</a>
-    <ul class="flex gap-6 text-sm text-muted">
+    <a href="/" class="font-display text-lg font-bold tracking-tight text-text">{SITE_TITLE}</a>
+    <ul class="flex gap-6 text-sm text-text-muted">
       {
         links.map((link) => (
           <li>
-            <a href={link.href} class="transition-colors hover:text-ink">
+            <a href={link.href} class="hover:text-text">
               {link.label}
             </a>
           </li>

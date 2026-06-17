@@ -2,8 +2,9 @@
 import Layout from '../layouts/Layout.astro'
 import { SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION } from '../consts'
 
-// Placeholder feature copy. A real product replaces every word here from
-// PRODUCT.md; generic copy reads as templated (skil_website-quality dim 5).
+// Placeholder feature copy describing the archetype itself (honest, not
+// fabricated). A real product replaces every word from PRODUCT.md; generic copy
+// reads as templated (skil_website-quality dim 5, frontend-design copy lens).
 const features = [
   {
     title: 'Found on the quality bar',
@@ -15,40 +16,43 @@ const features = [
   },
   {
     title: 'Fast by construction',
-    body: 'Astro ships zero JavaScript by default; Tailwind keeps the CSS small. Performance is the starting state.',
+    body: 'Astro ships zero JavaScript by default; self-hosted, subset fonts and a small CSS layer keep first paint quick.',
   },
 ]
 ---
 
 <Layout title={`${SITE_TITLE}: ${SITE_TAGLINE}`} description={SITE_DESCRIPTION}>
   <section class="mx-auto max-w-5xl px-6 py-24">
-    <p class="text-sm font-medium uppercase tracking-widest text-accent">{SITE_TITLE}</p>
-    <h1 class="mt-3 max-w-3xl text-balance text-5xl font-semibold tracking-tight">
+    <p class="font-mono text-sm font-semibold uppercase tracking-widest text-accent">{SITE_TITLE}</p>
+    <h1 class="mt-3 max-w-3xl text-balance font-display text-5xl font-bold tracking-tight text-text">
       {SITE_TAGLINE}
     </h1>
-    <p class="mt-6 max-w-2xl text-lg text-muted">{SITE_DESCRIPTION}</p>
+    <p class="mt-6 max-w-2xl text-lg text-text-muted">{SITE_DESCRIPTION}</p>
     <div class="mt-8 flex flex-wrap gap-4">
       <a
         href="/#features"
-        class="rounded-md bg-ink px-5 py-3 font-medium text-paper transition-colors hover:bg-accent"
+        class="rounded-md bg-brand px-5 py-3 font-semibold text-bg shadow-sm hover:opacity-90"
       >
         See what ships
       </a>
-      <a href="/#about" class="rounded-md px-5 py-3 font-medium text-ink underline-offset-4 hover:underline">
+      <a
+        href="/#about"
+        class="rounded-md border border-border px-5 py-3 font-semibold text-text hover:border-brand hover:text-brand"
+      >
         Read the brief
       </a>
     </div>
   </section>
 
-  <section id="features" class="border-t border-ink/10 bg-ink/[0.02]">
+  <section id="features" class="border-y border-border bg-surface">
     <div class="mx-auto max-w-5xl px-6 py-20">
-      <h2 class="text-3xl font-semibold tracking-tight">What ships in the box</h2>
-      <ul class="mt-10 grid gap-8 sm:grid-cols-3">
+      <h2 class="font-display text-3xl font-bold tracking-tight text-text">What ships in the box</h2>
+      <ul class="mt-10 grid gap-6 sm:grid-cols-3">
         {
           features.map((feature) => (
-            <li>
-              <h3 class="text-lg font-semibold">{feature.title}</h3>
-              <p class="mt-2 text-muted">{feature.body}</p>
+            <li class="rounded-lg border border-border bg-bg p-6 shadow-sm">
+              <h3 class="font-display text-lg font-bold text-text">{feature.title}</h3>
+              <p class="mt-2 text-text-muted">{feature.body}</p>
             </li>
           ))
         }
@@ -57,12 +61,15 @@ const features = [
   </section>
 
   <section id="about" class="mx-auto max-w-5xl px-6 py-20">
-    <h2 class="text-3xl font-semibold tracking-tight">About this starter</h2>
-    <p class="mt-6 max-w-2xl text-lg text-muted">
+    <h2 class="font-display text-3xl font-bold tracking-tight text-text">About this starter</h2>
+    <p class="mt-6 max-w-2xl text-lg text-text-muted">
       This is the bare archetype: replace the copy, the palette in
-      <code>src/styles/global.css</code>, and the constants in <code>src/consts.ts</code>
-      with your own. Run <code>npm run verify</code> for the static quality gate and
-      <code>npm run verify:lighthouse</code> for the performance budget.
+      <code class="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-text"
+        >src/styles/tokens/brand.css</code
+      >, and the type pairing in
+      <code class="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-text">astro.config.mjs</code> with
+      your own. Run <code class="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-text">npm run verify</code>
+      for the static quality gate.
     </p>
   </section>
 </Layout>
