@@ -1,0 +1,16 @@
+node_modules
+dist
+dist-ssr
+.astro
+*.local
+.DS_Store
+
+# editor / tooling
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# test + build artifacts
+coverage
+playwright-report
+test-results

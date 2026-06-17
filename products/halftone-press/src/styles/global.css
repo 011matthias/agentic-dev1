@@ -1,0 +1,56 @@
+/* global.css -- the stylesheet Layout loads. Pulls Tailwind and the token layer
+   together, then sets the quality FLOOR that is not taste: reduced motion,
+   visible keyboard focus, the skip link, and one shared transition feel.
+
+   Import order: Tailwind first (so @theme is recognized), then the shared
+   contract, then the per-project brand. Token resolution is by the cascade at
+   use time, so brand can override contract regardless of import order. */
+@import "tailwindcss";
+@import "./tokens/contract.css";
+@import "./tokens/brand.css";
+
+/* Honor the OS reduced-motion setting: collapse animation and transition to
+   near-instant, and drop smooth scroll. A user who asked for less motion gets
+   it everywhere, including any primitive added later. This is the bar, not a
+   per-component opt-in. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visible keyboard focus, themed by the brand focus role (a brand-layer var, not
+   the inlined Tailwind token, which @theme inline does not emit to :root). */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* One transition feel for interactive elements: animate only the properties that
+   change on hover/focus (not `all`, which would also animate layout), on the
+   standard ease and base duration from the contract. */
+a,
+button,
+[role="button"] {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-timing-function: var(--ease-standard);
+  transition-duration: var(--duration-base);
+}
+
+/* The skip link is offscreen until focused; a keyboard user lands on it first
+   and can jump the nav straight to <main>. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 50;
+}
+.skip-link:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+}
