@@ -31,6 +31,11 @@ The phase and decision rules that attach to them:
   (`prove it bites`), the mechanical vs agent-judged layers, and the per-archetype
   verify profiles. Pairs with `skil_crew-verify` (the reference mechanical
   instance) and the `design-reviewer` agent (the agent-judged half).
+- `rule_website_build` : the `website`-archetype specialization of `rule_dev_loop`
+  (intake -> direction -> compose -> gates -> review -> ship -> anneal), promoting
+  `docs/website-build-workflow.md` to a rule. Entered via `/comd_build-site`. Pairs
+  with `skil_website-design` + `skil_website-quality` + `design-reviewer` and the
+  `templates/website` gate suite.
 
 ## Still to write (a hook or a cycle will earn each)
 
