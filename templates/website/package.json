@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
-    "verify": "astro check && astro build && node verify/check-website.mjs && node verify/check-tokens.mjs && node verify/check-no-raw-values.mjs",
+    "verify": "astro check && astro build && node verify/check-website.mjs && node verify/check-tokens.mjs && node verify/check-no-raw-values.mjs && node verify/check-html.mjs",
+    "verify:full": "npm run verify && node verify/check-axe.mjs && node verify/lighthouse-budget.mjs",
     "verify:lighthouse": "node verify/lighthouse-budget.mjs"
   },
   "dev1": {
@@ -17,12 +18,13 @@
     "status": "scaffolded"
   },
   "dependencies": {
-    "astro": "^5.13.0",
-    "@astrojs/sitemap": "^3.2.1"
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^5.13.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@tailwindcss/vite": "^4.1.0",
+    "html-validate": "^11.5.3",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.7.0"
   }
