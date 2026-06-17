@@ -1,8 +1,9 @@
 ---
 import '../styles/global.css'
 import { Font } from 'astro:assets'
-import Header from '../components/Header.astro'
-import Footer from '../components/Footer.astro'
+import Nav from '../components/primitives/Nav.astro'
+import Footer from '../components/primitives/Footer.astro'
+import { SITE_TITLE, NAV_LINKS } from '../consts'
 
 interface Props {
   title: string
@@ -73,10 +74,10 @@ const jsonLd = {
   </head>
   <body class="min-h-screen bg-bg font-body text-base text-text antialiased">
     <a class="skip-link rounded-md bg-brand px-3 py-2 font-medium text-bg" href="#main">Skip to content</a>
-    <Header />
+    <Nav brand={SITE_TITLE} links={NAV_LINKS} />
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    <Footer brand={SITE_TITLE} />
   </body>
 </html>

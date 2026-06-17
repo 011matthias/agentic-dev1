@@ -1,0 +1,18 @@
+---
+// CtaBand: a full-width call-to-action strip, the page's closing ask. `tone`
+// picks the ground: `surface` (quiet, the default) or `brand` (loud, spend it
+// once). The heading, body, and action live in the slot so the copy stays the
+// page's; on a brand band, compose a button that contrasts (e.g. bg-bg text-brand).
+interface Props {
+  tone?: 'surface' | 'brand'
+  id?: string
+}
+const { tone = 'surface', id } = Astro.props
+const toneClass = tone === 'brand' ? 'bg-brand text-bg' : 'bg-surface text-text'
+---
+
+<section id={id} class:list={['border-y border-border', toneClass]}>
+  <div class="mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 py-16 text-center sm:py-20">
+    <slot />
+  </div>
+</section>

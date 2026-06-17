@@ -7,3 +7,9 @@ export const SITE_TAGLINE = 'A starting point for a fast, accessible, well-struc
 export const SITE_DESCRIPTION =
   'The agentic-dev1 website archetype: an Astro + Tailwind starter wired to the ' +
   'skil_website-quality bar (SEO, social metadata, accessibility, performance).'
+
+export const NAV_LINKS = [
+  { href: '/#features', label: 'Features' },
+  { href: '/#faq', label: 'FAQ' },
+  { href: '/#contact', label: 'Contact' },
+]

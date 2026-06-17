@@ -1,0 +1,90 @@
+---
+// Nav: the primary navigation. Desktop shows the links inline; below `md` they
+// collapse into a JS-free disclosure (<details>/<summary>), which is keyboard-
+// operable out of the box (the summary is focusable, Enter/Space toggles). The
+// link list is given twice rather than reflowed because the two layouts differ
+// structurally (inline row vs popover); the source is the one `links` array.
+interface NavLink {
+  href: string
+  label: string
+}
+interface Props {
+  brand: string
+  brandHref?: string
+  links?: NavLink[]
+  cta?: { href: string; label: string }
+}
+const { brand, brandHref = '/', links = [], cta } = Astro.props
+---
+
+<header class="border-b border-border bg-bg">
+  <nav aria-label="Primary" class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
+    <a href={brandHref} class="font-display text-lg font-bold tracking-tight text-text">{brand}</a>
+
+    {
+      (links.length > 0 || cta) && (
+        <div class="flex items-center gap-3">
+          <ul class="hidden items-center gap-6 text-sm text-text-muted md:flex">
+            {links.map((l) => (
+              <li>
+                <a href={l.href} class="hover:text-text">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          {cta && (
+            <a
+              href={cta.href}
+              class="hidden rounded-md bg-brand px-4 py-2 text-sm font-semibold text-bg hover:opacity-90 md:inline-block"
+            >
+              {cta.label}
+            </a>
+          )}
+
+          {links.length > 0 && (
+            <details class="nav-disclosure relative md:hidden">
+              <summary
+                class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-border text-text"
+                aria-label="Toggle menu"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <line x1="3" y1="6" x2="17" y2="6" />
+                  <line x1="3" y1="10" x2="17" y2="10" />
+                  <line x1="3" y1="14" x2="17" y2="14" />
+                </svg>
+              </summary>
+              <ul class="absolute right-0 z-40 mt-2 w-52 rounded-lg border border-border bg-surface p-2 text-sm shadow-lg">
+                {links.map((l) => (
+                  <li>
+                    <a href={l.href} class="block rounded px-3 py-2 text-text-muted hover:bg-bg hover:text-text">
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+                {cta && (
+                  <li>
+                    <a href={cta.href} class="mt-1 block rounded-md bg-brand px-3 py-2 font-semibold text-bg">
+                      {cta.label}
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </details>
+          )}
+        </div>
+      )
+    }
+  </nav>
+</header>
+
+<style>
+  /* Drop the default disclosure triangle; the summary is styled as a button. */
+  .nav-disclosure > summary {
+    list-style: none;
+  }
+  .nav-disclosure > summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
