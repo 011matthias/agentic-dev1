@@ -1,0 +1,63 @@
+---
+// Field: a labelled form control (input or textarea). The label is bound to the
+// control by id (axe requires every control to have an accessible name), help
+// text is wired with aria-describedby, and `required` sets the real attribute so
+// assistive tech announces it (the visual asterisk is decorative, aria-hidden).
+interface Props {
+  label: string
+  name: string
+  // The text-like input types this field supports (assignable to the HTML
+  // input `type` attribute; a checkbox/radio/file would want its own primitive).
+  type?: 'text' | 'email' | 'tel' | 'url' | 'password' | 'number' | 'search'
+  required?: boolean
+  placeholder?: string
+  help?: string
+  textarea?: boolean
+  autocomplete?: string
+}
+const {
+  label,
+  name,
+  type = 'text',
+  required = false,
+  placeholder,
+  help,
+  textarea = false,
+  autocomplete,
+} = Astro.props
+const id = `field-${name}`
+const helpId = help ? `${id}-help` : undefined
+const control =
+  'mt-1.5 block w-full rounded-md border border-border bg-bg px-3 py-2 text-text placeholder:text-text-muted'
+---
+
+<div>
+  <label for={id} class="block text-sm font-medium text-text">
+    {label}{required && <span class="text-accent" aria-hidden="true"> *</span>}
+  </label>
+  {
+    textarea ? (
+      <textarea
+        id={id}
+        name={name}
+        required={required}
+        placeholder={placeholder}
+        aria-describedby={helpId}
+        rows="4"
+        class={control}
+      />
+    ) : (
+      <input
+        id={id}
+        name={name}
+        type={type}
+        required={required}
+        placeholder={placeholder}
+        autocomplete={autocomplete}
+        aria-describedby={helpId}
+        class={control}
+      />
+    )
+  }
+  {help && <p id={helpId} class="mt-1 text-sm text-text-muted">{help}</p>}
+</div>

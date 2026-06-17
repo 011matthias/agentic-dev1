@@ -1,0 +1,22 @@
+---
+// Card: a surface panel. With `href` it becomes a single link target (the whole
+// card is clickable and focusable) with a hover lift; without it, a static
+// container. Themed through roles only, so it inverts correctly in dark.
+interface Props {
+  href?: string
+  class?: string
+}
+const { href, class: className = '' } = Astro.props
+const Tag = href ? 'a' : 'div'
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'block rounded-lg border border-border bg-surface p-6 shadow-sm',
+    href && 'transition hover:border-brand hover:shadow-md',
+    className,
+  ]}
+>
+  <slot />
+</Tag>

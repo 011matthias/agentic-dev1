@@ -1,10 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Hero from '../components/primitives/Hero.astro'
+import Section from '../components/primitives/Section.astro'
+import Card from '../components/primitives/Card.astro'
+import Faq from '../components/primitives/Faq.astro'
+import Form from '../components/primitives/Form.astro'
+import Field from '../components/primitives/Field.astro'
+import CtaBand from '../components/primitives/CtaBand.astro'
 import { SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION } from '../consts'
 
-// Placeholder feature copy describing the archetype itself (honest, not
-// fabricated). A real product replaces every word from PRODUCT.md; generic copy
-// reads as templated (skil_website-quality dim 5, frontend-design copy lens).
+// Honest placeholder copy describing the archetype itself; not fabricated. A real
+// product replaces every word from PRODUCT.md (skil_website-design's copy pass).
 const features = [
   {
     title: 'Found on the quality bar',
@@ -19,12 +25,26 @@ const features = [
     body: 'Astro ships zero JavaScript by default; self-hosted, subset fonts and a small CSS layer keep first paint quick.',
   },
 ]
+
+const faqs = [
+  {
+    q: 'What stack is this?',
+    a: 'Astro 5 (static output) with Tailwind v4 as the semantic token layer, self-hosted fonts via the Fonts API, built for Cloudflare Pages.',
+  },
+  {
+    q: 'How do I make it mine?',
+    a: 'Edit the palette in src/styles/tokens/brand.css and the type pairing in astro.config.mjs, then compose the primitives into your pages. skil_website-design runs the design pass.',
+  },
+  {
+    q: 'How is quality enforced?',
+    a: 'npm run verify runs the static gate (head, links, sitemap, dead-token); the browser tier adds axe and a Lighthouse budget. Both must pass before a site is done.',
+  },
+]
 ---
 
 <Layout title={`${SITE_TITLE}: ${SITE_TAGLINE}`} description={SITE_DESCRIPTION}>
-  <section class="mx-auto max-w-5xl px-6 py-24">
-    <p class="font-mono text-sm font-semibold uppercase tracking-widest text-accent">{SITE_TITLE}</p>
-    <h1 class="mt-3 max-w-3xl text-balance font-display text-5xl font-bold tracking-tight text-text">
+  <Hero eyebrow={SITE_TITLE}>
+    <h1 class="max-w-3xl text-balance font-display text-5xl font-bold tracking-tight text-text">
       {SITE_TAGLINE}
     </h1>
     <p class="mt-6 max-w-2xl text-lg text-text-muted">{SITE_DESCRIPTION}</p>
@@ -36,40 +56,61 @@ const features = [
         See what ships
       </a>
       <a
-        href="/#about"
+        href="/#contact"
         class="rounded-md border border-border px-5 py-3 font-semibold text-text hover:border-brand hover:text-brand"
       >
-        Read the brief
+        Get in touch
       </a>
     </div>
-  </section>
+  </Hero>
 
-  <section id="features" class="border-y border-border bg-surface">
-    <div class="mx-auto max-w-5xl px-6 py-20">
-      <h2 class="font-display text-3xl font-bold tracking-tight text-text">What ships in the box</h2>
-      <ul class="mt-10 grid gap-6 sm:grid-cols-3">
-        {
-          features.map((feature) => (
-            <li class="rounded-lg border border-border bg-bg p-6 shadow-sm">
+  <Section id="features" tone="surface" width="wide">
+    <h2 class="font-display text-3xl font-bold tracking-tight text-text">What ships in the box</h2>
+    <ul class="mt-10 grid gap-6 sm:grid-cols-3">
+      {
+        features.map((feature) => (
+          <li>
+            <Card>
               <h3 class="font-display text-lg font-bold text-text">{feature.title}</h3>
               <p class="mt-2 text-text-muted">{feature.body}</p>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
+            </Card>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
 
-  <section id="about" class="mx-auto max-w-5xl px-6 py-20">
-    <h2 class="font-display text-3xl font-bold tracking-tight text-text">About this starter</h2>
-    <p class="mt-6 max-w-2xl text-lg text-text-muted">
-      This is the bare archetype: replace the copy, the palette in
-      <code class="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-text"
-        >src/styles/tokens/brand.css</code
-      >, and the type pairing in
-      <code class="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-text">astro.config.mjs</code> with
-      your own. Run <code class="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-text">npm run verify</code>
-      for the static quality gate.
+  <Section id="faq">
+    <h2 class="font-display text-3xl font-bold tracking-tight text-text">Questions</h2>
+    <div class="mt-8 max-w-3xl">
+      <Faq items={faqs} />
+    </div>
+  </Section>
+
+  <Section id="contact" tone="surface">
+    <div class="max-w-xl">
+      <h2 class="font-display text-3xl font-bold tracking-tight text-text">Get in touch</h2>
+      <p class="mt-3 text-text-muted">A demonstration of the form primitive; wire the action to your endpoint.</p>
+      <div class="mt-8">
+        <Form action="#">
+          <Field label="Name" name="name" autocomplete="name" required />
+          <Field label="Email" name="email" type="email" autocomplete="email" required help="We only use it to reply." />
+          <Field label="Message" name="message" textarea required />
+          <button type="submit" class="rounded-md bg-brand px-5 py-3 font-semibold text-bg shadow-sm hover:opacity-90">
+            Send message
+          </button>
+        </Form>
+      </div>
+    </div>
+  </Section>
+
+  <CtaBand tone="brand">
+    <h2 class="font-display text-3xl font-bold tracking-tight">Start from a floor you can trust</h2>
+    <p class="max-w-xl text-bg/90">
+      Scaffold a product, run the design pass, and ship over the quality bar by default.
     </p>
-  </section>
+    <a href="/#features" class="rounded-md bg-bg px-5 py-3 font-semibold text-brand hover:opacity-90">
+      See what ships
+    </a>
+  </CtaBand>
 </Layout>

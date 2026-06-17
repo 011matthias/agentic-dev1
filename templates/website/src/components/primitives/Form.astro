@@ -1,0 +1,15 @@
+---
+// Form: the <form> wrapper. Compose Field primitives inside it. `action` is
+// left to the project (a form endpoint, a serverless function, a mailto); the
+// primitive does not assume a backend.
+interface Props {
+  action?: string
+  method?: 'get' | 'post'
+  class?: string
+}
+const { action, method = 'post', class: className = '' } = Astro.props
+---
+
+<form action={action} method={method} class:list={['space-y-5', className]}>
+  <slot />
+</form>
