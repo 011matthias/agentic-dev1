@@ -1,0 +1,47 @@
+---
+// Footer: optional link columns + a bottom line. The bottom line defaults to a
+// copyright but is a slot, so a project can put anything there. Groups are
+// rendered as headed lists so the footer is navigable, not a wall of links.
+interface FooterLink {
+  href: string
+  label: string
+}
+interface FooterGroup {
+  title: string
+  links: FooterLink[]
+}
+interface Props {
+  brand: string
+  groups?: FooterGroup[]
+}
+const { brand, groups = [] } = Astro.props
+const year = new Date().getFullYear()
+---
+
+<footer class="border-t border-border bg-bg">
+  <div class="mx-auto max-w-7xl px-6 py-12">
+    {
+      groups.length > 0 && (
+        <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+          {groups.map((g) => (
+            <div>
+              <h2 class="text-sm font-semibold text-text">{g.title}</h2>
+              <ul class="mt-3 space-y-2 text-sm text-text-muted">
+                {g.links.map((l) => (
+                  <li>
+                    <a href={l.href} class="hover:text-text">
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )
+    }
+    <div class:list={['text-sm text-text-muted', groups.length > 0 && 'mt-10 border-t border-border pt-6']}>
+      <slot><p>&copy; {year} {brand}.</p></slot>
+    </div>
+  </div>
+</footer>

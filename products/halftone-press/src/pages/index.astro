@@ -1,0 +1,186 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Hero from '../components/primitives/Hero.astro'
+import Section from '../components/primitives/Section.astro'
+import Card from '../components/primitives/Card.astro'
+import Faq from '../components/primitives/Faq.astro'
+import Form from '../components/primitives/Form.astro'
+import Field from '../components/primitives/Field.astro'
+import CtaBand from '../components/primitives/CtaBand.astro'
+import { Picture } from 'astro:assets'
+import showcase from '../assets/showcase.png'
+import { SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION } from '../consts'
+
+// Real-to-riso copy. Risograph is a stencil duplicator: one spot-colour drum per
+// pass, overprinting two inks to make a third, with a characteristic grain and
+// slight misregistration. The STUDIO is a clearly-labelled fiction; the process is
+// described truthfully. Numbering the passes is structure encoding a real sequence.
+const passes = [
+  {
+    n: '01',
+    title: 'Separate',
+    body: 'Artwork is split into spot-colour layers, one per drum. Two inks is the house default; each extra colour is another pass through the machine.',
+  },
+  {
+    n: '02',
+    title: 'Print, one colour at a time',
+    body: 'Each layer is burned to a master and printed in a single pass. The paper goes back through for the next colour, so registration is set by hand, not a press.',
+  },
+  {
+    n: '03',
+    title: 'Overprint',
+    body: 'Where two inks land on the same spot they multiply into a third. The slight offset between passes is the look, not a defect; we set it deliberately.',
+  },
+]
+
+const editions = [
+  {
+    title: 'Posters',
+    body: 'A2 and A3, two to four colours on 120gsm stock. Runs of 30 to 200; every sheet is a little different and that is the point.',
+  },
+  {
+    title: 'Zines',
+    body: 'Saddle-stitched, short-run, printed and folded in-house. Built for work that wants ink you can feel rather than a clean laser flat.',
+  },
+  {
+    title: 'Prints to spec',
+    body: 'Bring separated artwork or a single image and a palette. We proof one copy, agree the registration, then run the edition.',
+  },
+]
+
+const faqs = [
+  {
+    q: 'How many colours can a riso print hold?',
+    a: 'As many as there are passes, but two or three is where riso sings. Overprinting them yields the secondary colours, so a two-ink job already reads as four or five.',
+  },
+  {
+    q: 'Why is the registration slightly off?',
+    a: 'The paper is fed by hand for each colour, so the layers never land perfectly. We tune the offset rather than hide it; it is the signature of the process.',
+  },
+  {
+    q: 'What files do you need?',
+    a: 'Either separated spot-colour layers (one greyscale per ink) or a single image with the palette named. We can separate house artwork for you on request.',
+  },
+  {
+    q: 'What turnaround should I expect?',
+    a: 'A proof in a few days, the edition within a week or two depending on colour count and run length. Hand-fed printing does not rush.',
+  },
+]
+---
+
+<Layout title={`${SITE_TITLE}: ${SITE_TAGLINE}`} description={SITE_DESCRIPTION}>
+  <Hero eyebrow="Risograph studio">
+    <h1 class="overprint max-w-3xl font-display text-5xl font-bold leading-[1.02] tracking-tight text-text sm:text-[4.5rem]">
+      Ink you can feel, one pass at a time.
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-text-muted">{SITE_DESCRIPTION}</p>
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a
+        href="/#order"
+        class="rounded-md bg-brand px-5 py-3 font-semibold text-bg shadow-sm hover:opacity-90"
+      >
+        Start an edition
+      </a>
+      <a
+        href="/#process"
+        class="rounded-md border border-border px-5 py-3 font-semibold text-text hover:border-accent hover:text-accent"
+      >
+        See the process
+      </a>
+    </div>
+  </Hero>
+
+  <Section id="process" tone="surface" width="wide">
+    <p class="font-mono text-sm font-semibold uppercase tracking-widest text-accent">Three passes</p>
+    <h2 class="mt-2 font-display text-3xl font-bold tracking-tight text-text">How a riso print is made</h2>
+    {/* One connected panel with hairline-divided cells (gap-px over a border
+        fill), not three separate cards: the passes read as a single sequence,
+        each colour laid over the last. Distinct from the Editions cards below. */}
+    <ol class="mt-10 grid gap-px overflow-hidden rounded-lg border border-border bg-border md:grid-cols-3">
+      {
+        passes.map((pass) => (
+          <li class="flex flex-col bg-surface p-6">
+            <span class="font-mono text-4xl font-bold leading-none text-accent">{pass.n}</span>
+            <h3 class="mt-4 font-display text-lg font-bold text-text">{pass.title}</h3>
+            <p class="mt-2 text-text-muted">{pass.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </Section>
+
+  <Section width="wide">
+    <Picture
+      src={showcase}
+      formats={['avif', 'webp']}
+      widths={[480, 960, 1440]}
+      sizes="(max-width: 768px) 100vw, 1200px"
+      alt="Two-colour riso poster: overlapping blue and magenta rings on bright stock."
+      loading="lazy"
+      class="w-full rounded-lg border border-border"
+    />
+  </Section>
+
+  <Section id="editions">
+    <h2 class="font-display text-3xl font-bold tracking-tight text-text">What we print</h2>
+    <ul class="mt-10 grid gap-6 sm:grid-cols-3">
+      {
+        editions.map((edition) => (
+          <li>
+            <Card>
+              <h3 class="font-display text-lg font-bold text-text">{edition.title}</h3>
+              <p class="mt-2 text-text-muted">{edition.body}</p>
+            </Card>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section id="faq" tone="surface">
+    <h2 class="font-display text-3xl font-bold tracking-tight text-text">Questions about riso</h2>
+    <div class="mt-8 max-w-3xl">
+      <Faq items={faqs} />
+    </div>
+  </Section>
+
+  <Section id="order">
+    <div class="max-w-xl">
+      <h2 class="font-display text-3xl font-bold tracking-tight text-text">Start an edition</h2>
+      <p class="mt-3 text-text-muted">
+        Tell us the piece, the colours, and the run. We proof one copy before the edition runs.
+      </p>
+      <div class="mt-8">
+        <Form action="#">
+          <Field label="Name" name="name" autocomplete="name" required />
+          <Field label="Email" name="email" type="email" autocomplete="email" required help="For the proof and the quote." />
+          <Field label="What are we printing?" name="brief" textarea required help="Piece, size, colours, and rough run length." />
+          <button type="submit" class="rounded-md bg-brand px-5 py-3 font-semibold text-bg shadow-sm hover:opacity-90">
+            Request a proof
+          </button>
+        </Form>
+      </div>
+    </div>
+  </Section>
+
+  <CtaBand tone="brand">
+    <h2 class="font-display text-3xl font-bold tracking-tight">Two inks, endless overprint.</h2>
+    <p class="max-w-xl text-bg/90">
+      A fictional studio, a real process. Bring a drawing and a palette; we will set the registration by hand.
+    </p>
+    <a href="/#order" class="rounded-md bg-bg px-5 py-3 font-semibold text-brand hover:opacity-90">
+      Start an edition
+    </a>
+  </CtaBand>
+</Layout>
+
+<style>
+  /* The signature: a two-ink misregistration, the riso artifact. The ink text
+     carries the contrast; the offset magenta + blue copies are decorative, in the
+     brand-layer role vars (no raw colour). Reduced-motion is irrelevant (static). */
+  .overprint {
+    text-shadow:
+      0.055em 0.055em 0 var(--accent),
+      -0.05em -0.05em 0 var(--brand);
+  }
+</style>

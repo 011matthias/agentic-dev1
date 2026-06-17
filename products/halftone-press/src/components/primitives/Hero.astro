@@ -1,0 +1,40 @@
+---
+// Hero: structural variants, never a single imposed shape. It positions the
+// content (and, for `split`, a media slot); the heading, lead, actions, and the
+// signature element are composed by the page so identity is not baked into the
+// primitive. The hero is a thesis (frontend-design): open with the most
+// characteristic thing in the subject's world, not a default centered headline.
+//   stacked  - left-aligned column (the workhorse)
+//   centered - centered column (announcement, single strong line)
+//   split    - content beside a `media` slot, stacking on mobile
+interface Props {
+  variant?: 'stacked' | 'centered' | 'split'
+  eyebrow?: string
+}
+const { variant = 'stacked', eyebrow } = Astro.props
+---
+
+<div class="mx-auto max-w-7xl px-6 py-20 sm:py-28">
+  {
+    variant === 'split' ? (
+      <div class="grid items-center gap-12 md:grid-cols-2">
+        <div>
+          {eyebrow && (
+            <p class="font-mono text-sm font-semibold uppercase tracking-widest text-accent">{eyebrow}</p>
+          )}
+          <slot />
+        </div>
+        <div>
+          <slot name="media" />
+        </div>
+      </div>
+    ) : (
+      <div class:list={[variant === 'centered' ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl']}>
+        {eyebrow && (
+          <p class="font-mono text-sm font-semibold uppercase tracking-widest text-accent">{eyebrow}</p>
+        )}
+        <slot />
+      </div>
+    )
+  }
+</div>

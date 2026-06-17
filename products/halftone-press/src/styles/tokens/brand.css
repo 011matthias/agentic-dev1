@@ -1,0 +1,60 @@
+/* brand.css -- Halftone Press (a fictional risograph studio, the proof-site demo).
+ *
+ * Identity from the subject's world: risograph printing is spot-color drums laid
+ * one pass at a time, where overprinting two inks makes a third and slight
+ * misregistration is the signature. So the palette is the classic riso duo --
+ * federal blue + fluorescent magenta -- on bright paper stock, deep ink for text.
+ *
+ * Deliberately none of the three AI-default looks (no cream/serif/terracotta, no
+ * near-black/acid, no broadsheet hairline). The blue is the brand (dark enough to
+ * carry white text on a fill); the magenta is the accent, kept dark enough to
+ * clear 4.5:1 as small text; the fluorescent register lives in the overprint
+ * signature (a decorative two-colour offset), not in body copy. */
+
+:root {
+  color-scheme: light dark;
+
+  /* Light: bright paper, ink text, the riso duo. */
+  --bg: oklch(0.985 0.004 95);
+  --surface: oklch(1 0 0);
+  --text: oklch(0.2 0.02 265);
+  --muted: oklch(0.48 0.02 265);
+  --brand: oklch(0.45 0.17 260);
+  --accent: oklch(0.5 0.21 352);
+  --border: oklch(0.88 0.012 265);
+  --focus: oklch(0.45 0.18 260);
+
+  /* Dark: ink stock, the inks brightened toward their fluorescent register. */
+  --bg-dark: oklch(0.21 0.02 265);
+  --surface-dark: oklch(0.26 0.02 265);
+  --text-dark: oklch(0.96 0.005 95);
+  --muted-dark: oklch(0.72 0.02 265);
+  --brand-dark: oklch(0.72 0.15 260);
+  --accent-dark: oklch(0.74 0.19 352);
+  --border-dark: oklch(0.34 0.02 265);
+  --focus-dark: oklch(0.76 0.16 260);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: var(--bg-dark);
+    --surface: var(--surface-dark);
+    --text: var(--text-dark);
+    --muted: var(--muted-dark);
+    --brand: var(--brand-dark);
+    --accent: var(--accent-dark);
+    --border: var(--border-dark);
+    --focus: var(--focus-dark);
+  }
+}
+
+[data-theme="dark"] {
+  --bg: var(--bg-dark);
+  --surface: var(--surface-dark);
+  --text: var(--text-dark);
+  --muted: var(--muted-dark);
+  --brand: var(--brand-dark);
+  --accent: var(--accent-dark);
+  --border: var(--border-dark);
+  --focus: var(--focus-dark);
+}
