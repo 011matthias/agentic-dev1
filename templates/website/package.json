@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
-    "verify": "astro check && astro build && node verify/check-website.mjs",
+    "verify": "astro check && astro build && node verify/check-website.mjs && node verify/check-tokens.mjs",
     "verify:lighthouse": "node verify/lighthouse-budget.mjs"
   },
   "dev1": {

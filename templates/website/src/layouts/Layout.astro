@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import { Font } from 'astro:assets'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 
@@ -42,6 +43,14 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {/* Self-hosted faces: emits @font-face + preloads the two render-critical
+        faces (display, body). Mono is not preloaded (it appears below the fold,
+        in code), so the browser fetches it lazily. */}
+    <Font cssVariable="--ff-display" preload />
+    <Font cssVariable="--ff-body" preload />
+    <Font cssVariable="--ff-mono" />
+
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="canonical" href={canonical.href} />
@@ -62,8 +71,8 @@ const jsonLd = {
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   </head>
-  <body class="min-h-screen bg-paper text-ink font-sans antialiased">
-    <a class="skip-link rounded bg-ink px-3 py-2 text-paper" href="#main">Skip to content</a>
+  <body class="min-h-screen bg-bg font-body text-base text-text antialiased">
+    <a class="skip-link rounded-md bg-brand px-3 py-2 font-medium text-bg" href="#main">Skip to content</a>
     <Header />
     <main id="main">
       <slot />

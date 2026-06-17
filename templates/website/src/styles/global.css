@@ -1,20 +1,18 @@
+/* global.css -- the stylesheet Layout loads. Pulls Tailwind and the token layer
+   together, then sets the quality FLOOR that is not taste: reduced motion,
+   visible keyboard focus, the skip link, and one shared transition feel.
+
+   Import order: Tailwind first (so @theme is recognized), then the shared
+   contract, then the per-project brand. Token resolution is by the cascade at
+   use time, so brand can override contract regardless of import order. */
 @import "tailwindcss";
+@import "./tokens/contract.css";
+@import "./tokens/brand.css";
 
-/* Design tokens (Tailwind v4 reads @theme; no tailwind.config.js). These are
-   neutral starting points: a product replaces the palette and type faces with
-   its own art direction (frontend-design), the one place this template stays
-   deliberately quiet so it does not ship as one of the AI-default looks. */
-@theme {
-  --color-ink: oklch(0.22 0.02 250);
-  --color-paper: oklch(0.99 0.005 250);
-  --color-muted: oklch(0.55 0.02 250);
-  --color-accent: oklch(0.58 0.16 256);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-}
-
-/* Quality floor (skil_website-quality dimension 3/6 and frontend-design's floor):
-   reduced motion honored, a visible keyboard-focus ring, and a smooth scroll
-   that yields to the OS preference. These are not taste; they are the bar. */
+/* Honor the OS reduced-motion setting: collapse animation and transition to
+   near-instant, and drop smooth scroll. A user who asked for less motion gets
+   it everywhere, including any primitive added later. This is the bar, not a
+   per-component opt-in. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -26,13 +24,26 @@
   }
 }
 
+/* Visible keyboard focus, themed by the brand focus role (a brand-layer var, not
+   the inlined Tailwind token, which @theme inline does not emit to :root). */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
-/* The skip link is visually offscreen until focused; keyboard users land on it
-   first and can jump past the nav straight to <main>. */
+/* One transition feel for interactive elements: animate only the properties that
+   change on hover/focus (not `all`, which would also animate layout), on the
+   standard ease and base duration from the contract. */
+a,
+button,
+[role="button"] {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-timing-function: var(--ease-standard);
+  transition-duration: var(--duration-base);
+}
+
+/* The skip link is offscreen until focused; a keyboard user lands on it first
+   and can jump the nav straight to <main>. */
 .skip-link {
   position: absolute;
   left: -9999px;
